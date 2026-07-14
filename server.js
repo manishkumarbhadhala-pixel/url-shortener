@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const pool = require('./config/db');
+const urlRoutes = require('./routes/urlRoutes');
 
 const app = express();
 
@@ -20,7 +21,10 @@ app.get('/test-db', async (req, res) => {
     console.log(error);
     res.status(500).json({ message: 'DB connection failed', error: error.message });
   }
-})
+});
+
+app.use('/api',urlRoutes);
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
