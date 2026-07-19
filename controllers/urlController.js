@@ -53,4 +53,20 @@ const shortenUrl = async (req, res) => {
   }
 };
 
-module.exports = { shortenUrl };
+const redirectUrl = async (req,res)=>{
+    try{
+        const {short_code} = req.params;
+        const [rows] = await pool.query('select * from urls where short_code = ?',[short_code]);
+
+        if(rows.length === 0){
+            return res.status(404).json({message:'short url not found'});
+        }
+
+        res.redirect(rows[0].original_url);
+    }catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong', details: error.message });
+  }
+};
+
+module.exports = { shortenUrl,redirectUrl };

@@ -7,23 +7,16 @@ const app = express();
 
 
 app.use(express.json());
+app.use(express.static('public'));
 
 //test route
 app.get('/', (req, res) => {
   res.send('URL Shortener API is running...');
 });
 
-app.get('/test-db', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT 1 + 1 AS result');
-    res.json({ message: 'DB connected successfully', result: rows[0].result });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: 'DB connection failed', error: error.message });
-  }
-});
 
-app.use('/api',urlRoutes);
+
+app.use('/',urlRoutes);
 
 const PORT = process.env.PORT || 5000;
 
